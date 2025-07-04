@@ -2,6 +2,8 @@ import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { Banner, Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
+import '@docsearch/css'
+import { AlgoliaSearch } from './components/AlgoliaSearch'
  
 export const metadata = {
   // Define your metadata here
@@ -21,7 +23,7 @@ export default async function RootLayout({ children }) {
   return (
     <html
       // Not required, but good for SEO
-      lang="en"
+      lang="ja"
       // Required to be set
       dir="ltr"
       // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
@@ -36,6 +38,7 @@ export default async function RootLayout({ children }) {
         <Layout
           banner={banner}
           navbar={navbar}
+          search={< AlgoliaSearch />}
           pageMap={await getPageMap()}
           docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
           footer={footer}
