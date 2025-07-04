@@ -3,8 +3,8 @@ import { Banner, Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 import '@docsearch/css'
-import { AlgoliaSearch } from './components/AlgoliaSearch'
- 
+import { DocSearch } from '@docsearch/react';
+
 export const metadata = {
   // Define your metadata here
   // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
@@ -34,11 +34,15 @@ export default async function RootLayout({ children }) {
       >
         {/* Your additional tags should be passed as `children` of `<Head>` element */}
       </Head>
+       <DocSearch
+        appId='LU594YEDZA'
+        indexName= 'dev_crawler'
+        apiKey= 'e7dbb83e71e3969c82307d7753731750'
+        />
       <body>
         <Layout
           banner={banner}
           navbar={navbar}
-          search={< AlgoliaSearch />}
           pageMap={await getPageMap()}
           docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
           footer={footer}
