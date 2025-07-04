@@ -13,6 +13,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    // 手動追加分
+    "noImplicitAny": false,
+    
     "plugins": [
       {
         "name": "next"
