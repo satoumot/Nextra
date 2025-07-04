@@ -1,0 +1,99 @@
+# スキーマ駆動開発
+## どのツールで何を自動生成できるか
+
+| 元データ                   | 生成物                         | 主なツール・サービス例                                                                                         | 備考                                         |
+| ---------------------- | --------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| テーブル定義書（Excel/CSV/DDL） | DBスキーマ（SQL, ORM）            | DB設計ツール（ERD Cloud, dbdiagram.io, SQL Power Architect）<br />Prisma Migrate, Sequelize-CLI, TypeORM-CLI | ER図ツールでDDL生成、ORMでマイグレーションファイル作成            |
+| DBスキーマ                 | GraphQLスキーマ                 | Hasura, Prisma + Nexus, PostGraphile, graphql-mesh                                                  | HasuraやPostGraphileはDBから直接GraphQLスキーマを自動生成 |
+| GraphQLスキーマ            | gRPC .protoファイル             | graphql-to-proto（OSSツール）、自作スクリプト                                                                    | 自動変換ツールは限定的。設計ルールの統一が必要                    |
+| GraphQLスキーマ            | リゾルバ雛形                      | GraphQL Code Generator（typescript-resolvers plugin）                                                 | ロジック実装は手作業。雛形や型付きインターフェース生成可能              |
+| GraphQLスキーマ            | React/Next.jsコード（型, Hooks等） | GraphQL Code Generator（typescript, react-apollo plugin等）                                            | フロントエンド用の型やHooks, SDKを自動生成                 |
+
+---
+
+### ツール詳細補足
+
+* **DBスキーマ→GraphQLスキーマ**
+
+  * *Hasura*：PostgreSQLから自動でGraphQLエンドポイントを構築
+  * *Prisma + Nexus*：PrismaでDB型生成、Nexusで型安全なGraphQLスキーマ生成
+  * *PostGraphile*：PostgreSQL→GraphQL自動化
+
+* **GraphQLスキーマ→gRPC .proto**
+
+  * *graphql-to-proto*：[GitHubリポジトリ](https://github.com/yarax/graphql-to-proto)
+  * ※完全自動化は難しく、手動調整もよく発生
+
+* **GraphQLスキーマ→リゾルバ雛形**
+
+  * *GraphQL Code Generator*：`typescript-resolvers`プラグイン
+
+* **GraphQLスキーマ→React/Next.jsコード**
+
+  * *GraphQL Code Generator*：`typescript`, `typescript-operations`, `typescript-react-apollo`プラグイン等
+
+---
+
+### 備考
+
+* 特に「GraphQLスキーマ→gRPC .proto」は、自動変換ツールがまだ少なく、構造の対応関係や型制約の違いに注意が必要です。
+* 「テーブル定義書→DBスキーマ」はDBごと・現場ごとに微妙なノウハウ差があります。
+* フロントエンド用のコード生成（型・Hooks）はGraphQL Code Generator一択レベルで支持されています。
+
+---
+---
+
+## Python（FastAPI）で使えるORM」かつ「Oracle Autonomous Databaseに対応したツールPython（FastAPI）で使えるORM」かつ「Oracle Autonomous Databaseに対応したツール
+
+
+| 元データ                   | 生成物                         | 主なツール・サービス例                                                                                                     | 備考                               |
+| ---------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| テーブル定義書（Excel/CSV/DDL） | DBスキーマ（SQL, ORMモデル）         | **ERDツール（ERD Cloud, dbdiagram.io, SQL Power Architect）**<br />**SQLAlchemy（Oracle対応）**<br />**Alembic（マイグレーション管理）** | SQLAlchemyはPythonでOracle DB対応ORM |
+| DBスキーマ                 | GraphQLスキーマ                 | **Ariadne**, **Strawberry GraphQL**, **graphene-oracle**<br />（Hasura/PostGraphileはOracle未対応）                     | DBスキーマからGraphQL型への自動生成は手動調整が多め   |
+| GraphQLスキーマ            | gRPC .protoファイル             | graphql-to-proto、自作スクリプト                                                                                        | Oracle依存なし、設計調整必要                |
+| GraphQLスキーマ            | リゾルバ雛形                      | **GraphQL Code Generator**（typescript-resolvers）、Ariadneコード生成スクリプト                                              | Python用雛形は自作しやすい                 |
+| GraphQLスキーマ            | React/Next.jsコード（型, Hooks等） | **GraphQL Code Generator**（typescript, react-apolloプラグイン等）                                                      | フロントエンドは従来通り                     |
+
+---
+
+### ツールのポイント
+
+#### 1. **SQLAlchemy**
+
+* Python製ORMのデファクトスタンダード。
+* **Oracle Databaseに正式対応**（`cx_Oracle`ドライバ利用）。
+* マイグレーションは**Alembic**を使う。
+
+#### 2. **Ariadne / Strawberry / Graphene**
+
+* Python製GraphQLサーバーフレームワーク。
+* Grapheneは`graphene-oracle`でOracleの直接サポートあり。
+* DBスキーマからGraphQL型への変換は、ORMモデルからGraphQL型をマッピングするコードを書くことが多い。
+
+#### 3. **GraphQL Code Generator**
+
+* フロントエンド（React/Next.js）向けコード生成に引き続き最強。
+* バックエンドの型やリゾルバ雛形生成にも使えるが、TypeScript寄り。
+
+#### 4. **graphql-to-proto**
+
+* GraphQLスキーマからgRPCの.protoファイル変換にチャレンジしたい場合に。
+
+---
+
+### 備考
+
+* **Oracle Autonomous Database**用のDDL出力やSQLAlchemyモデル生成は、Oracle SQL Developer（公式GUIツール）や`sqlacodegen`（既存DBからSQLAlchemyモデル自動生成）なども利用可能です。
+* PythonのGraphQL系フレームワーク（Ariadne/Strawberry/Graphene）は、DB直結の自動生成までは未対応が多く、モデル→型定義の補助スクリプトを書くパターンが一般的です。
+
+---
+
+### 参考URL
+
+* [SQLAlchemy Oracleドキュメント](https://docs.sqlalchemy.org/en/20/dialects/oracle.html)
+* [Ariadne](https://ariadnegraphql.org/)
+* [Strawberry GraphQL](https://strawberry.rocks/)
+* [Graphene-Python/graphene-oracle](https://github.com/graphql-python/graphene-oracle)
+* [sqlacodegen（既存DB→ORMモデル自動生成）](https://github.com/agronholm/sqlacodegen)
+
+---
