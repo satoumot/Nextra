@@ -3,8 +3,7 @@ import { Banner, Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 import Algolia from './components/Docsearch'
-// import '@docsearch/css'
-// import { DocSearch } from '@docsearch/react';
+
 
 // export const metadata = {
 //   // Define your metadata here
@@ -39,7 +38,7 @@ export default async function RootLayout({ children }) {
         <Layout
           banner={banner}
           navbar={navbar}
-          search={ <Algolia/> }
+          search={ <Algolia/> } //ここを追記
           pageMap={await getPageMap()}
           docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
           footer={footer}
