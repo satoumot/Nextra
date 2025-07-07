@@ -18,11 +18,14 @@ export default {
     }
   },
   "algolia": "アルゴリア",
+  "nest": "ネスト",
   '###': {
     type: 'separator',
     title: 'My Items' // Title is optional
   },
-  "Nest": "ネスト",
-  "survey": "schema"
+  "survey": "schema",
+  '---': {
+    type: 'separator',
+  },
 
 }
