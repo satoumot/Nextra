@@ -1,5 +1,4 @@
 export default {
-    "docs": "メイン",
     "contact": {
         title: "conect",
         href: 'https://google.com'
@@ -17,5 +16,10 @@ export default {
         href: 'x.com'
       }
     }
+  },
+  "algolia": "アルゴリア",
+  '###': {
+    type: 'separator',
+    title: 'My Items' // Title is optional
   }
 }

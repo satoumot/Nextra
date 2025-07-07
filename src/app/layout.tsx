@@ -1,10 +1,10 @@
-"use client";
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { Banner, Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
-import '@docsearch/css'
-import { DocSearch } from '@docsearch/react';
+import Algolia from './components/Docsearch'
+// import '@docsearch/css'
+// import { DocSearch } from '@docsearch/react';
 
 // export const metadata = {
 //   // Define your metadata here
@@ -35,15 +35,11 @@ export default async function RootLayout({ children }) {
       >
         {/* Your additional tags should be passed as `children` of `<Head>` element */}
       </Head>
-       <DocSearch
-        appId='LU594YEDZA'
-        indexName= 'dev_crawler'
-        apiKey= 'e7dbb83e71e3969c82307d7753731750'
-        />
       <body>
         <Layout
           banner={banner}
           navbar={navbar}
+          search={ <Algolia/> }
           pageMap={await getPageMap()}
           docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
           footer={footer}
